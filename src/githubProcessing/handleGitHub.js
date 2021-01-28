@@ -33,7 +33,7 @@ function injectPage(){
   }
 }
 
-
+// TODO markdown links will break!
 function processRepo(repos){
   var pageRelativeIssueId = 0;
   var components = $(".comment-body, .commit-title, .commit-desc, .js-issue-title");
@@ -45,7 +45,8 @@ function processRepo(repos){
       var text = splittedBody[i];
       for(var j in repos){
         var repo = repos[j];
-        if (splittedBody[i].indexOf(repo.keyword) > -1){
+        var index = text.indexOf(repo.keyword)
+        if (index === 0 || (index > 0 && (text[index-1].match(/[ #\[]/) !== null))) {
           //Clean the link from some symbols usually added to destinguish issue-id from commit message
           var issueId = text.replaceAll("[", "").replaceAll("\\]", "").replaceAll(")", "").replaceAll("(", "").replaceAll("#", "").trim();
           var newId = pageRelativeIssueId++;
