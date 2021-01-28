@@ -13,9 +13,13 @@ addStyle("src/issuePreview/issuePreview.css");
 issuePreviewer = {
   enableIssuePreview : function(repo, id, selectorPart){
     if(youtrackHandler.isCompatible(repo)){
+      // TODO Only return fields that are used by setupTip()
       url = youtrackHandler.getRestURL(repo) + id;
       $.ajax({
         url : url,
+        xhrFields: {
+          withCredentials: true // Note that this does not work because YT does not set cookie with SameSite=None (required by Chrome 80+ for CORS)
+        },
         success : content => this.setupTip(content, selectorPart),
         dataType : "json"
       });
